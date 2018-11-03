@@ -11,6 +11,7 @@ class Event(models.Model):
 
     start_date_time = models.DateTimeField()
     create_date_time = models.DateTimeField(auto_now_add=True)
+    update_date_time = models.DateTimeField(auto_now=True)
 
     city = models.TextField(null=False)
     country = models.TextField(null=False)
@@ -133,6 +134,8 @@ class Contact(models.Model):
     create_date_time = models.DateTimeField(auto_now_add=True)
 
     updated_date_time = models.DateTimeField(auto_now=True)
+
+    deleted = models.BooleanField(default=False)
 
     def __init__(self, owner_user, contact_user):
         super(Contact, self).__init__()

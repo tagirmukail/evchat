@@ -5,18 +5,19 @@ class User(models.Model):
     phone = models.TextField(null=False, unique=True, db_index=True)
     password = models.TextField(null=False)
 
-    create_date = models.DateTimeField(auto_created=True,
-                                       auto_now=True)
-    online_status = models.BooleanField(default=False)
+    create_date_time = models.DateTimeField(auto_now_add=True)
 
     avatar = models.TextField(null=True)
+
+    online_status = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
 
     def __str__(self):
         user_str = """
         Id:{},
         Name:{},
         Phone:{},
-        Create Date:{},
+        Create Date and Time:{},
         Online:{}""".format(
             self.id,
             self.name,
