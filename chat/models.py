@@ -8,6 +8,14 @@ class Room(models.Model):
     online_status = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
+    def __init__(self, name, label, deleted=False, online_status=False):
+        super(Room, self).__init__()
+        self.name = name
+        self.label = label
+        self.deleted = deleted if deleted else False
+        self.online_status = online_status if online_status else False
+
+
     def __repr__(self):
         return """
         Id:{},
@@ -26,6 +34,32 @@ class Roster(models.Model):
     room = models.ForeignKey(Room, related_name='rooms', on_delete=False)
     user = models.ForeignKey(User, related_name='users', on_delete=False)
 
+    def __repr__(self):
+        return """
+        Id:{id},
+        
+        Room:{room},
+        
+        User:{user}
+        """.format(
+            id=self.id,
+            room=self.room,
+            user=self.user
+        )
+
+    def __str__(self):
+        return """
+                Id:{id},
+
+                Room:{room},
+
+                User:{user}
+                """.format(
+            id=self.id,
+            room=self.room,
+            user=self.user
+        )
+
 class Message(models.Model):
     room = models.ForeignKey(Room, related_name='messages', on_delete=False)
     user = models.ForeignKey(User, related_name='users', on_delete=False)
@@ -34,9 +68,21 @@ class Message(models.Model):
     message_html = models.TextField()
 
     send_date = models.DateTimeField(auto_now_add=True)
-    deliv_date = models.DateTimeField()
+    delive_date = models.DateTimeField()
 
     deleted = models.BooleanField(default=False)
+
+    def __init__(self, room, user, message, message_html, delive_date, deleted):
+        super(Message, self).__init__()
+        self.room = room
+        self.user = user
+
+        self.message = message
+        self.message_html = message_html
+
+        self.delive_date = delive_date
+
+        self.deleted = deleted
 
     def __repr__(self):
         return """
@@ -49,5 +95,5 @@ class Message(models.Model):
             self.room.id,
             self.user.id,
             self.send_date,
-            self.deliv_date
+            self.delive_date
         )

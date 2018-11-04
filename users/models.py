@@ -1,3 +1,4 @@
+import bcrypt
 from django.db import models
 
 class User(models.Model):
@@ -12,7 +13,29 @@ class User(models.Model):
     online_status = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __init__(self, name, phone, password, avatar, online_status=False, deleted=False):
+        super(User, self).__init__()
+        self.name = name
+        self.phone = phone
+        self.password = self.gen_password(password)
+        self.avatar = avatar
+        self.online_status = online_status if online_status else False
+        self.deleted = deleted if deleted else False
+
+    def gen_password(self, password):
+        hash_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+        return hash_password
+
+    def check_password(self, password):
+        hash_password = bcrypt.hashpw(password.encode('utf-8'), self.password)
+
+        if hash_password == self.password:
+            return True
+
+        return False
+
+    def __repr__(self):
         user_str = """
         Id:{},
         Name:{},
@@ -22,7 +45,7 @@ class User(models.Model):
             self.id,
             self.name,
             self.phone,
-            self.create_date,
+            self.create_date_time,
             self.online_status
         )
         return user_str
