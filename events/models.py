@@ -135,7 +135,7 @@ class Like(models.Model):
 
 class Contact(models.Model):
 
-    owner_user = models.ForeignKey(User, related_name='contact_owners', on_delete=models.CASCADE)
+    owner_user = models.ManyToManyField(User, related_name='contact_owners')
 
     contact_user = models.ForeignKey(User, related_name='contact_users', on_delete=models.CASCADE)
 

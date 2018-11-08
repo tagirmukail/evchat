@@ -31,8 +31,8 @@ class Room(models.Model):
         )
 
 class Roster(models.Model):
-    room = models.ManyToManyField(Room, related_name='rooms', on_delete=models.CASCADE)
-    user = models.ManyToManyField(User, related_name='users', on_delete=models.CASCADE)
+    room = models.ManyToManyField(Room, related_name='rooms')
+    user = models.ManyToManyField(User, related_name='users')
 
     def __repr__(self):
         return """
