@@ -31,8 +31,8 @@ class Room(models.Model):
         )
 
 class Roster(models.Model):
-    room = models.ForeignKey(Room, related_name='rooms', on_delete=False)
-    user = models.ForeignKey(User, related_name='users', on_delete=False)
+    room = models.ManyToManyField(Room, related_name='rooms', on_delete=models.CASCADE)
+    user = models.ManyToManyField(User, related_name='users', on_delete=models.CASCADE)
 
     def __repr__(self):
         return """
@@ -61,8 +61,8 @@ class Roster(models.Model):
         )
 
 class Message(models.Model):
-    room = models.ForeignKey(Room, related_name='messages', on_delete=False)
-    user = models.ForeignKey(User, related_name='users', on_delete=False)
+    room = models.ForeignKey(Room, related_name='message_rooms', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='message_users', on_delete=models.CASCADE)
 
     message = models.TextField(null=False, max_length=3000)
     message_html = models.TextField()

@@ -4,7 +4,7 @@ from users.models import User
 
 class Event(models.Model):
 
-    owner = models.ForeignKey(User, related_name='users', on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, related_name='event_owners', on_delete=models.CASCADE)
 
     title = models.TextField(null=False, max_length=50)
     description = models.TextField(max_length=500, null=True)
@@ -71,9 +71,9 @@ class Event(models.Model):
 
 
 class Subscribe(models.Model):
-    subscribe_user = models.ForeignKey(User, related_name='users', on_delete=False)
+    subscribe_user = models.ForeignKey(User, related_name='subscribe_users', on_delete=models.CASCADE)
 
-    event = models.ForeignKey(Event, related_name='events', on_delete=False)
+    event = models.ForeignKey(Event, related_name='subscribe_events', on_delete=models.CASCADE)
 
     create_date_time = models.DateTimeField(auto_now=True)
 
@@ -105,7 +105,9 @@ class Subscribe(models.Model):
 class Like(models.Model):
     status_add = models.BooleanField(default=True)
 
-    event = models.ForeignKey(Event, related_name='events', on_delete=False)
+    like_user = models.ForeignKey(User, related_name='like_users', on_delete=models.CASCADE)
+
+    event = models.ForeignKey(Event, related_name='like_events', on_delete=models.CASCADE)
 
     create_date_time = models.DateTimeField(auto_now=True)
 
@@ -133,9 +135,9 @@ class Like(models.Model):
 
 class Contact(models.Model):
 
-    owner_user = models.ForeignKey(User, related_name='users', on_delete=False)
+    owner_user = models.ForeignKey(User, related_name='contact_owners', on_delete=models.CASCADE)
 
-    contact_user = models.ForeignKey(User, related_name='users', on_delete=False)
+    contact_user = models.ForeignKey(User, related_name='contact_users', on_delete=models.CASCADE)
 
     create_date_time = models.DateTimeField(auto_now_add=True)
 
