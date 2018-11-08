@@ -91,11 +91,14 @@ class Subscribe(models.Model):
         {event},
         
         Subscriber User:
-        {subscriber_user}
+        {subscriber_user},
+        
+        Create Date Time:{create_date_time}
         """.format(
             id=self.id,
             event=self.event,
-            subscriber_user=self.subscribe_user
+            subscriber_user=self.subscribe_user,
+            create_date_time=self.create_date_time
         )
 
 
@@ -118,11 +121,14 @@ class Like(models.Model):
         Status Add:{status_add},
         
         Event:
-        {event}
+        {event},
+        
+        Create Date Time:{create_date_time}
         """.format(
             id=self.id,
             status_add=self.status_add,
-            event=self.event
+            event=self.event,
+            create_date_time=self.create_date_time
         )
 
 class Contact(models.Model):
@@ -137,12 +143,12 @@ class Contact(models.Model):
 
     deleted = models.BooleanField(default=False)
 
-    def __init__(self, owner_user, contact_user):
+    def __init__(self, owner_user, contact_user, deleted):
         super(Contact, self).__init__()
 
         self.owner_user = owner_user
         self.contact_user = contact_user
-
+        self.deleted = deleted
 
     def __repr__(self):
         return """
@@ -152,9 +158,17 @@ class Contact(models.Model):
         {owner_user},
         
         Contact User:
-        {contact_user}
+        {contact_user},
+        
+        Deleted:{deleted},
+        
+        Create Date Time:{create_date_time},
+        Update Date Time:{update_date_time}
         """.format(
             id=self.id,
             owner_user=self.owner_user,
-            contact_user=self.contact_user
+            contact_user=self.contact_user,
+            deleted=self.deleted,
+            create_date_time=self.create_date_time,
+            update_date_time=self.updated_date_time
         )
