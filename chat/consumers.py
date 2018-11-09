@@ -32,5 +32,5 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             except Exception:
                 pass
 
-    async def join_room(self, room_id):
-        room = await 
+    # async def join_room(self, room_id):
+    #     room = await

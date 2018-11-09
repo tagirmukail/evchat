@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load bootstrap3 %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ev chat</title>
+
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed"
+                      data-toggle="collapse" data-target="#navbar">
+              </button>
+              <a class="navbar-brand" href="{% url 'index' %}">Day book</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                  <li>
+                      <a href="{% url 'index' %}">Темы</a>
+                  </li>
+              </ul>
+
+              <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    Hello, {{ user.username }}.
+                    <a href="{% url 'logout' %}">Выход</a>
+                {% else %}
+                    <a href="{% url 'register' %}">Регистрация</a> -
+                    <a href="{% url 'login' %}">Войти</a>
+                {% endif %}
+              </ul>
+          </div>
+      </div>
+  </nav>
+
+  <div class="container">
+      <div class="page-header">
+          {% block header %}{% endblock header %}
+      </div>
+      <div>
+        {% block content %}{% endblock content %}
+      </div>
+</div>
+</body>
+</html>
