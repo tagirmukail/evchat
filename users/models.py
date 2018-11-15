@@ -2,18 +2,18 @@ import bcrypt
 from django.db import models
 
 class User(models.Model):
-    name = models.TextField(null=True)
+    name = models.TextField(null=True, blank=True)
     phone = models.TextField(null=False, unique=True, db_index=True)
     password = models.TextField(null=False)
 
     create_date_time = models.DateTimeField(auto_now_add=True)
 
-    avatar = models.TextField(null=True)
+    avatar = models.TextField(null=True, blank=True)
 
     online_status = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
-    def __init__(self, name, phone, password, avatar, online_status=False, deleted=False):
+    def __init__(self, phone, password, name=None, avatar=None, online_status=False, deleted=False):
         super(User, self).__init__()
         self.name = name
         self.phone = phone
