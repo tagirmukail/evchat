@@ -1,10 +1,14 @@
 import bcrypt
+import hashlib
+# from django.contrib.auth.models import User as AbstrUser
 from django.db import models
+from .helpers import Helper
 
 class User(models.Model):
     name = models.TextField(null=True, blank=True)
     phone = models.TextField(null=False, unique=True, db_index=True)
-    password = models.TextField(null=False)
+
+    password = models.TextField(null=True)
 
     create_date_time = models.DateTimeField(auto_now_add=True)
 
@@ -13,11 +17,14 @@ class User(models.Model):
     online_status = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
-    def __init__(self, phone, password, name=None, avatar=None, online_status=False, deleted=False):
+    def __init__(self, phone, password=None, name=None, avatar=None, online_status=False, deleted=False):
         super(User, self).__init__()
         self.name = name
         self.phone = phone
-        self.password = self.gen_password(password)
+
+        if password:
+            self.password = self.gen_password(password)
+
         self.avatar = avatar
         self.online_status = online_status if online_status else False
         self.deleted = deleted if deleted else False
@@ -34,6 +41,10 @@ class User(models.Model):
             return True
 
         return False
+
+    def set_token(self):
+        helper = Helper()
+        return helper.generate_sha256_hash(self.phone)
 
     def __repr__(self):
         user_str = """

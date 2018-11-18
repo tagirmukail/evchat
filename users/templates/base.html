@@ -17,7 +17,7 @@
               <button type="button" class="navbar-toggle collapsed"
                       data-toggle="collapse" data-target="#navbar">
               </button>
-              <a class="navbar-brand" href="{% url 'index' %}">Day book</a>
+              <a class="navbar-brand" href="{% url 'index' %}">Ev chat</a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav">
@@ -31,8 +31,7 @@
                     Hello, {{ user.username }}.
                     <a href="{% url 'logout' %}">Выход</a>
                 {% else %}
-                    <a href="{% url 'register' %}">Регистрация</a> -
-                    <a href="{% url 'login' %}">Войти</a>
+                    <a href="{% url 'authentication' %}">Регистрация</a>
                 {% endif %}
               </ul>
           </div>

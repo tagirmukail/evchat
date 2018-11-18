@@ -3,12 +3,12 @@
 
 {% block header %}
     <h2>
-        Регистрация пользователя
+        Введите код подтверждения!
     </h2>
 {% endblock header %}
 
 {% block content %}
-<form method="post" action="{% url 'register' %}" class="form">
+<form method="post" action="{% url 'registration' %}" class="form">
     {% csrf_token %}
 
     {% bootstrap_form form %}
@@ -16,6 +16,6 @@
     {% buttons %}
         <button name="submit" class="btn btn-primary">Зарегистрировать</button>
     {% endbuttons %}
-    <input type="hidden" name="next" value="{% url 'login' %}"/>
+    <!--<input type="hidden" name="next" value="{% url 'index' %}"/>-->
 </form>
 {% endblock content %}

@@ -1,0 +1,10 @@
+Django~=2.0.0
+channels==2.1.5
+asgi_redis
+django-channels-presence
+xmpppy
+channels_redis~=2.0
+bcrypt
+django-bootstrap3
+Pillow
+python-memcached==1.59
