@@ -1,10 +1,10 @@
 from django.db import models
 
-from users.models import User
+from users.models import UserProfile
 
 class Event(models.Model):
 
-    owner = models.ForeignKey(User, related_name='event_owners', on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserProfile, related_name='event_owners', on_delete=models.CASCADE)
 
     title = models.TextField(null=False, max_length=50)
     description = models.TextField(max_length=500, null=True)
@@ -71,7 +71,7 @@ class Event(models.Model):
 
 
 class Subscribe(models.Model):
-    subscribe_user = models.ForeignKey(User, related_name='subscribe_users', on_delete=models.CASCADE)
+    subscribe_user = models.ForeignKey(UserProfile, related_name='subscribe_users', on_delete=models.CASCADE)
 
     event = models.ForeignKey(Event, related_name='subscribe_events', on_delete=models.CASCADE)
 
@@ -105,7 +105,7 @@ class Subscribe(models.Model):
 class Like(models.Model):
     status_add = models.BooleanField(default=True)
 
-    like_user = models.ForeignKey(User, related_name='like_users', on_delete=models.CASCADE)
+    like_user = models.ForeignKey(UserProfile, related_name='like_users', on_delete=models.CASCADE)
 
     event = models.ForeignKey(Event, related_name='like_events', on_delete=models.CASCADE)
 
@@ -135,9 +135,9 @@ class Like(models.Model):
 
 class Contact(models.Model):
 
-    owner_user = models.ManyToManyField(User, related_name='contact_owners')
+    owner_user = models.ManyToManyField(UserProfile, related_name='contact_owners')
 
-    contact_user = models.ForeignKey(User, related_name='contact_users', on_delete=models.CASCADE)
+    contact_user = models.ForeignKey(UserProfile, related_name='contact_users', on_delete=models.CASCADE)
 
     create_date_time = models.DateTimeField(auto_now_add=True)
 

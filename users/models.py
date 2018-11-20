@@ -4,7 +4,7 @@ import hashlib
 from django.db import models
 from .helpers import Helper
 
-class User(models.Model):
+class UserProfile(models.Model):
     name = models.TextField(null=True, blank=True)
     phone = models.TextField(null=False, unique=True, db_index=True)
 
@@ -18,7 +18,7 @@ class User(models.Model):
     deleted = models.BooleanField(default=False)
 
     def __init__(self, phone, password=None, name=None, avatar=None, online_status=False, deleted=False):
-        super(User, self).__init__()
+        super(UserProfile, self).__init__()
         self.name = name
         self.phone = phone
 
