@@ -1,30 +1,22 @@
 import bcrypt
-import hashlib
-# from django.contrib.auth.models import User as AbstrUser
+from django.contrib.auth.models import User
 from django.db import models
 from .helpers import Helper
 
-class UserProfile(models.Model):
-    name = models.TextField(null=True, blank=True)
-    phone = models.TextField(null=False, unique=True, db_index=True)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    password = models.TextField(null=True)
+    phone = models.TextField(null=False, unique=True, db_index=True)
+    avatar = models.TextField(null=True, blank=True)
 
     create_date_time = models.DateTimeField(auto_now_add=True)
-
-    avatar = models.TextField(null=True, blank=True)
 
     online_status = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
-    def __init__(self, phone, password=None, name=None, avatar=None, online_status=False, deleted=False):
-        super(UserProfile, self).__init__()
-        self.name = name
+    def __init__(self, phone, avatar=None, online_status=False, deleted=False):
+        super(Profile, self).__init__()
         self.phone = phone
-
-        if password:
-            self.password = self.gen_password(password)
-
         self.avatar = avatar
         self.online_status = online_status if online_status else False
         self.deleted = deleted if deleted else False
@@ -47,16 +39,18 @@ class UserProfile(models.Model):
         return helper.generate_sha256_hash(self.phone)
 
     def __repr__(self):
-        user_str = """
+        profile_str = """
         Id:{},
-        Name:{},
+        User:{},
         Phone:{},
         Create Date and Time:{},
-        Online:{}""".format(
+        Online:{},
+        Deleted:{}""".format(
             self.id,
-            self.name,
+            self.user,
             self.phone,
             self.create_date_time,
-            self.online_status
+            self.online_status,
+            self.deleted
         )
-        return user_str
+        return profile_str

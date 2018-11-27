@@ -4,6 +4,7 @@
 {% block header %}
     <h2>
         Введите код подтверждения!
+        <a href="{% url 'authentication' %}">Выслать код повторно!</a>
     </h2>
 {% endblock header %}
 
@@ -11,7 +12,8 @@
 <form method="post" action="{% url 'registration' %}" class="form">
     {% csrf_token %}
 
-    {% bootstrap_form form %}
+    {% bootstrap_form user_form %}
+    {% bootstrap_form profile_form %}
 
     {% buttons %}
         <button name="submit" class="btn btn-primary">Зарегистрировать</button>

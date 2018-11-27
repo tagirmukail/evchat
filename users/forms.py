@@ -2,7 +2,8 @@ from django import forms
 from django.core import validators
 from django.core.cache import cache
 from .helpers import Helper
-from .models import UserProfile
+from django.contrib.auth.models import User
+from .models import Profile
 from random import randint
 
 helper = Helper()
@@ -17,40 +18,50 @@ class SendForm(forms.Form):
                                             message="Phone number must be entered in the format: '+70000000000'. Up to 15 digits allowed.")
     phone = forms.CharField(label='Phone', validators=[phone_regex], max_length=17)
 
-    def generate_acceppted_pass(self):
-        password = str(randint(helper.MIN_PASS_VAL, helper.MAX_PASS_VAL))
+    def generate_acceppted_code(self):
+        accept_code = str(randint(helper.MIN_PASS_VAL, helper.MAX_PASS_VAL))
 
         while True:
-            if cache.get(password):
-                password = str(randint(helper.MIN_PASS_VAL, helper.MAX_PASS_VAL))
+            if cache.get(accept_code):
+                accept_code = str(randint(helper.MIN_PASS_VAL, helper.MAX_PASS_VAL))
             else:
                 break
 
-        print("password::", password, "phone:", self.cleaned_data.get("phone"))
+        print("password::", accept_code, "phone:", self.cleaned_data.get("phone"))
+        #TODO: add send in sms password on phone.
+        cache.set(accept_code, self.cleaned_data.get("phone"))
+        return accept_code
 
-        cache.set(password, self.cleaned_data.get("phone"))
-        return password
-
-class RegisterForm(forms.Form):
+class ProfileForm(forms.Form):
     class Meta:
-        model = UserProfile
+        model = Profile
         fields = {
-            'password'
+            'accept_code'
         }
 
-    password = forms.IntegerField(label='Password', min_value=helper.MIN_PASS_VAL, max_value=helper.MAX_PASS_VAL)
+    phone = ""
+    accept_code = forms.IntegerField(
+        label='Accept Code',
+        min_value=helper.MIN_PASS_VAL, max_value=helper.MAX_PASS_VAL,
+        widget=forms.PasswordInput()
+    )
+
+    def is_valid(self):
+        super(ProfileForm, self).is_valid()
+
+        accept_code_key = str(self.cleaned_data.get("accept_code"))
+        print("accept_code:::::::::::::::::::::::::::::::::", accept_code_key)
+        self.phone = cache.get(accept_code_key)
+        if not self.phone:
+            raise ValueError("Accept Code not allowed!")
+        return True
 
     def save(self, commit=True):
-        pass_key = str(self.cleaned_data.get("password"))
-        phone = cache.get(pass_key)
-        if not phone:
-            return None
-
-        user = UserProfile(phone=phone)
+        profile = Profile(phone=self.phone)
 
         if commit:
-            user.save()
-        return user
+            profile.save()
+        return profile
 
 class UserParametersForm(forms.Form):
     names_regex = validators.RegexValidator(regex=r'^[-a-zA-Z0-9_]+$',
@@ -67,7 +78,7 @@ class UserParametersForm(forms.Form):
 
     def save(self, commit=True):
 
-        user = UserProfile(
+        user = Profile(
             phone=self.phone,
             password=self.password2,
             name=self.name,
@@ -79,7 +90,7 @@ class UserParametersForm(forms.Form):
             user.save()
 
     class Meta:
-        model = UserProfile
+        model = Profile
         fields = {
             'name',
             'phone',

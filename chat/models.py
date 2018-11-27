@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import UserProfile
+from users.models import Profile
 
 class Room(models.Model):
     name = models.TextField(null=False)
@@ -32,7 +32,7 @@ class Room(models.Model):
 
 class Roster(models.Model):
     room = models.ManyToManyField(Room, related_name='rooms')
-    user = models.ManyToManyField(UserProfile, related_name='users')
+    user = models.ManyToManyField(Profile, related_name='users')
 
     def __repr__(self):
         return """
@@ -62,7 +62,7 @@ class Roster(models.Model):
 
 class Message(models.Model):
     room = models.ForeignKey(Room, related_name='message_rooms', on_delete=models.CASCADE)
-    user = models.ForeignKey(UserProfile, related_name='message_users', on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, related_name='message_users', on_delete=models.CASCADE)
 
     message = models.TextField(null=False, max_length=3000)
     message_html = models.TextField()
