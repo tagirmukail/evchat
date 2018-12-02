@@ -14,8 +14,8 @@ class Profile(models.Model):
     online_status = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
-    def __init__(self, phone, avatar=None, online_status=False, deleted=False):
-        super(Profile, self).__init__()
+    def create(self, phone, avatar="", online_status=False, deleted=False):
+        super(Profile, self).create()
         self.phone = phone
         self.avatar = avatar
         self.online_status = online_status if online_status else False

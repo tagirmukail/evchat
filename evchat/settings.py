@@ -150,7 +150,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = "/"
+# LOGIN_REDIRECT_URL = "/index"
+LOGIN_URL = "/auth"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")

@@ -22,7 +22,10 @@
           <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav">
                   <li>
-                      <a href="{% url 'index' %}">Темы</a>
+                      <a href="{% url 'index' %}">Домой</a>
+                  </li>
+                  <li>
+                      <a href="{% url 'index' %}">NP</a>
                   </li>
               </ul>
 
@@ -31,7 +34,8 @@
                     Hello, {{ user.username }}.
                     <a href="{% url 'logout' %}">Выход</a>
                 {% else %}
-                    <a href="{% url 'authentication' %}">Регистрация</a>
+                    <a href="{% url 'auth' %}">Вход</a>
+                    <a href="{% url 'send_code' %}">Регистрация</a>
                 {% endif %}
               </ul>
           </div>

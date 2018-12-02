@@ -1,14 +1,18 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth import logout, login
 from django.contrib.auth.forms import UserCreationForm
-from .forms import ProfileForm, SendForm
+from .forms import ProfileForm, SendForm, LoginForm
+from django.contrib.auth.decorators import login_required
 
+
+@login_required
 def index(request):
-    return HttpResponse(b'hello')
+    return render(request, "users/index.html")
 
-def authentication(request):
+
+def send_code(request):
     form = SendForm()
 
     if request.method == 'POST':
@@ -19,7 +23,22 @@ def authentication(request):
             return HttpResponseRedirect(reverse('registration'))
 
     context = {'form': form}
+    return render(request, 'users/send_code.html', context)
+
+
+def auth(request):
+    login_form = LoginForm()
+    if request.method == 'POST':
+        try:
+            login_form = LoginForm(data=request.POST)
+            if login_form.is_valid():
+                login(request, login_form.profile.user)
+                return HttpResponseRedirect(request.POST.get('next'))
+        except ValueError as err:
+            login_form.add_error("phone", err)
+    context = {'form': login_form}
     return render(request, 'users/auth.html', context)
+
 
 def registration(request):
     user_form = UserCreationForm()
@@ -35,7 +54,7 @@ def registration(request):
                 new_profile.user = new_user
                 new_profile.save()
                 if new_user and new_profile:
-                    return HttpResponseRedirect(reverse('index'))
+                    return HttpResponseRedirect(reverse('auth'))
         except ValueError as err:
             profile_form.add_error('accept_code', err)
 
@@ -43,6 +62,7 @@ def registration(request):
     return render(request, 'users/register.html', context)
 
 
+@login_required
 def logout_view(request):
     logout(request)
 

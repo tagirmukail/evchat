@@ -3,6 +3,8 @@ from django.core import validators
 from django.core.cache import cache
 from .helpers import Helper
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.views import AuthenticationForm
 from .models import Profile
 from random import randint
 
@@ -32,6 +34,34 @@ class SendForm(forms.Form):
         cache.set(accept_code, self.cleaned_data.get("phone"))
         return accept_code
 
+class LoginForm(forms.Form):
+    class Meta:
+        fields = {
+            'phone',
+            'password'
+        }
+
+    phone_regex = validators.RegexValidator(regex=r'^\+?1?\d{9,15}$',
+                                            message="Phone number must be entered in the format: '+70000000000'. Up to 15 digits allowed.")
+
+    phone = forms.CharField(label='Phone', validators=[phone_regex], max_length=17)
+    password = forms.CharField(label="Passowrd", max_length=50, widget=forms.PasswordInput(attrs={'class': 'Password'}))
+
+    def is_valid(self):
+        super(LoginForm, self).is_valid()
+        phone = self.cleaned_data.get("phone")
+        password = self.cleaned_data.get("password")
+        if not phone or not password:
+            raise ValueError("Not exists phone or password!")
+
+        profile = Profile.objects.filter(phone=self.cleaned_data.get("phone")).first()
+        if not profile or check_password(profile.user.password, password):
+            raise ValueError("User with phone:{} not registered or bad password!".format(phone))
+
+        self.profile = profile
+
+        return True
+
 class ProfileForm(forms.Form):
     class Meta:
         model = Profile
@@ -54,6 +84,9 @@ class ProfileForm(forms.Form):
         self.phone = cache.get(accept_code_key)
         if not self.phone:
             raise ValueError("Accept Code not allowed!")
+        old_profile = Profile.objects.filter(phone=self.phone).first()
+        if old_profile:
+            return False
         return True
 
     def save(self, commit=True):

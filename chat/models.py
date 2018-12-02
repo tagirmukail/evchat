@@ -8,8 +8,7 @@ class Room(models.Model):
     online_status = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
-    def __init__(self, name, label, deleted=False, online_status=False):
-        super(Room, self).__init__()
+    def create(self, name, label, deleted=False, online_status=False):
         self.name = name
         self.label = label
         self.deleted = deleted if deleted else False
@@ -72,8 +71,7 @@ class Message(models.Model):
 
     deleted = models.BooleanField(default=False)
 
-    def __init__(self, room, user, message, message_html, delive_date, deleted):
-        super(Message, self).__init__()
+    def create(self, room, user, message, message_html, delive_date, deleted):
         self.room = room
         self.user = user
 

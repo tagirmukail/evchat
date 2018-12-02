@@ -20,7 +20,7 @@ class Event(models.Model):
 
     delete = models.BooleanField(default=False)
 
-    def __init__(self,
+    def create(self,
                  title,
                  desctiption,
                  city,
@@ -29,7 +29,7 @@ class Event(models.Model):
                  close,
                  create_date_time,
                  start_date_time):
-        super(Event, self).__init__()
+        super(Event, self).create()
 
         self.title = title
         self.description = desctiption
@@ -77,8 +77,8 @@ class Subscribe(models.Model):
 
     create_date_time = models.DateTimeField(auto_now=True)
 
-    def __init__(self, subscriber_user, event):
-        super(Subscribe, self).__init__()
+    def create(self, subscriber_user, event):
+        super(Subscribe, self).create()
 
         self.subscribe_user = subscriber_user
         self.event = event
@@ -111,8 +111,8 @@ class Like(models.Model):
 
     create_date_time = models.DateTimeField(auto_now=True)
 
-    def __init__(self, status_add, event):
-        super(Like, self).__init__()
+    def create(self, status_add, event):
+        super(Like, self).create()
 
         self.status_add = status_add
         self.event = event
@@ -137,7 +137,7 @@ class Contact(models.Model):
 
     owner_user = models.ManyToManyField(Profile, related_name='contact_owners')
 
-    contact_user = models.ForeignKey(Profile, related_name='contact_users', on_delete=models.CASCADE)
+    contact_user = models.ManyToManyField(Profile, related_name='contact_users')
 
     create_date_time = models.DateTimeField(auto_now_add=True)
 
@@ -145,8 +145,8 @@ class Contact(models.Model):
 
     deleted = models.BooleanField(default=False)
 
-    def __init__(self, owner_user, contact_user, deleted):
-        super(Contact, self).__init__()
+    def create(self, owner_user, contact_user, deleted):
+        super(Contact, self).create()
 
         self.owner_user = owner_user
         self.contact_user = contact_user
