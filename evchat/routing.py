@@ -1,17 +1,14 @@
-from django.urls import path
-
-from channels.http import AsgiHandler
-from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
-
+from channels.routing import ProtocolTypeRouter, URLRouter
 from chat.consumers import ChatConsumer
+from django.conf.urls import url
 
 application = ProtocolTypeRouter(
     {
         "websocket": AuthMiddlewareStack(
             URLRouter(
                 [
-                    path("chat/stream", ChatConsumer)
+                    url(r"chat/stream/", ChatConsumer)
                 ]
             )
         )

@@ -19,14 +19,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-redis_host = os.environ.get('REDIS_HOST', 'localhost')
+redis_host = os.environ.get('REDIS_HOST', '127.0.0.1')
 
 CHANNELS_LAYERS = {
     "default": {
         "BACKEND": "channel_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [(redis_host, 6379)]
-        }
+        },
+        # 'ROUTING': 'evchat.routing.channel_routing'
     }
 }
 
@@ -149,13 +150,33 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 # LOGIN_REDIRECT_URL = "/index"
 LOGIN_URL = "/auth"
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
-]
-
 MEDIA_ROOT = '/media/'
 MEDIA_URL = '/media/'
+
+# Specific settings
+IS_ENTER_OR_LEAVE_ROOMS = True
+
+MESSAGE_TYPES_CHOICES = {
+    0: 'MESSAGE',
+    1: 'WARNING',
+    2: 'ALERT',
+    3: 'MUTED',
+    4: 'ENTER',
+    5: 'LEAVE'
+}
+
+TYPES_BY_MESSAGES = {
+    'MESSAGE': 0,
+    'WARNING': 1,
+    'ALERT': 2,
+    'MUTED': 3,
+    'ENTER': 4,
+    'LEAVE': 5
+}

@@ -5,6 +5,7 @@ class Room(models.Model):
     name = models.TextField(null=False)
     label = models.SlugField(unique=True)
     create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
     online_status = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
@@ -14,6 +15,9 @@ class Room(models.Model):
         self.deleted = deleted if deleted else False
         self.online_status = online_status if online_status else False
 
+    @property
+    def group_name(self):
+        return "room-{}".format(self.id)
 
     def __repr__(self):
         return """
