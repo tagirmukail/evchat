@@ -105,7 +105,7 @@ class Subscribe(models.Model):
 class Like(models.Model):
     status_add = models.BooleanField(default=True)
 
-    like_user = models.ForeignKey(Profile, related_name='like_users', on_delete=models.CASCADE)
+    like_users = models.ForeignKey(Profile, related_name='like_users', on_delete=models.CASCADE)
 
     event = models.ForeignKey(Event, related_name='like_events', on_delete=models.CASCADE)
 
@@ -135,9 +135,9 @@ class Like(models.Model):
 
 class Contact(models.Model):
 
-    owner_user = models.ManyToManyField(Profile, related_name='contact_owners')
+    owner_profiles = models.ManyToManyField(Profile, related_name='owners')
 
-    contact_user = models.ManyToManyField(Profile, related_name='contact_users')
+    contact_profiles = models.ManyToManyField(Profile, related_name='contact_profiles')
 
     create_date_time = models.DateTimeField(auto_now_add=True)
 
@@ -145,22 +145,14 @@ class Contact(models.Model):
 
     deleted = models.BooleanField(default=False)
 
-    def create(self, owner_user, contact_user, deleted):
+    def create(self, deleted):
         super(Contact, self).create()
 
-        self.owner_user = owner_user
-        self.contact_user = contact_user
         self.deleted = deleted
 
     def __repr__(self):
         return """
         Id:{id},
-        
-        Owner User:
-        {owner_user},
-        
-        Contact User:
-        {contact_user},
         
         Deleted:{deleted},
         
@@ -168,8 +160,6 @@ class Contact(models.Model):
         Update Date Time:{update_date_time}
         """.format(
             id=self.id,
-            owner_user=self.owner_user,
-            contact_user=self.contact_user,
             deleted=self.deleted,
             create_date_time=self.create_date_time,
             update_date_time=self.updated_date_time

@@ -8,6 +8,7 @@ class Room(models.Model):
     update_date = models.DateTimeField(auto_now=True)
     online_status = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
+    profiles = models.ManyToManyField(Profile, related_name='profiles')
 
     def create(self, name, label, deleted=False, online_status=False):
         self.name = name
@@ -31,36 +32,6 @@ class Room(models.Model):
             self.label,
             self.create_date,
             self.online_status
-        )
-
-class Roster(models.Model):
-    room = models.ManyToManyField(Room, related_name='rooms')
-    user = models.ManyToManyField(Profile, related_name='users')
-
-    def __repr__(self):
-        return """
-        Id:{id},
-        
-        Room:{room},
-        
-        User:{user}
-        """.format(
-            id=self.id,
-            room=self.room,
-            user=self.user
-        )
-
-    def __str__(self):
-        return """
-                Id:{id},
-
-                Room:{room},
-
-                User:{user}
-                """.format(
-            id=self.id,
-            room=self.room,
-            user=self.user
         )
 
 class Message(models.Model):
