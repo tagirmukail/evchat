@@ -3,12 +3,12 @@ from django.core import validators
 from django.core.cache import cache
 from .helpers import Helper
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth.views import AuthenticationForm
-from .models import Profile
+from django.contrib.auth.hashers import check_password, make_password
+from .models import Profile, Phone
 from random import randint
 
 helper = Helper()
+
 
 class SendForm(forms.Form):
     class Meta:
@@ -34,33 +34,6 @@ class SendForm(forms.Form):
         cache.set(accept_code, self.cleaned_data.get("phone"))
         return accept_code
 
-class LoginForm(forms.Form):
-    class Meta:
-        fields = {
-            'phone',
-            'password'
-        }
-
-    phone_regex = validators.RegexValidator(regex=r'^\+?1?\d{9,15}$',
-                                            message="Phone number must be entered in the format: '+70000000000'. Up to 15 digits allowed.")
-
-    phone = forms.CharField(label='Phone', validators=[phone_regex], max_length=17)
-    password = forms.CharField(label="Passowrd", max_length=50, widget=forms.PasswordInput(attrs={'class': 'Password'}))
-
-    def is_valid(self):
-        super(LoginForm, self).is_valid()
-        phone = self.cleaned_data.get("phone")
-        password = self.cleaned_data.get("password")
-        if not phone or not password:
-            raise ValueError("Not exists phone or password!")
-
-        profile = Profile.objects.filter(phone=self.cleaned_data.get("phone")).first()
-        if not profile or check_password(profile.user.password, password):
-            raise ValueError("User with phone:{} not registered or bad password!".format(phone))
-
-        self.profile = profile
-
-        return True
 
 class ProfileForm(forms.Form):
     class Meta:
@@ -73,7 +46,7 @@ class ProfileForm(forms.Form):
     accept_code = forms.IntegerField(
         label='Accept Code',
         min_value=helper.MIN_PASS_VAL, max_value=helper.MAX_PASS_VAL,
-        widget=forms.PasswordInput()
+        widget=forms.NumberInput()
     )
 
     def is_valid(self):
@@ -84,16 +57,35 @@ class ProfileForm(forms.Form):
         self.phone = cache.get(accept_code_key)
         if not self.phone:
             raise ValueError("Accept Code not allowed!")
-        old_profile = Profile.objects.filter(phone=self.phone).first()
-        if old_profile:
-            return False
+
         return True
 
-    def save(self, commit=True):
-        profile = Profile(phone=self.phone)
+    def get_profile_by_phone(self):
+        try:
+            phone = Phone.objects.filter(number=self.phone).first()
+            profile = phone.profile
+            if not phone:
+                return None
+            return profile
+        except Exception as exception:
+            return None
 
-        if commit:
-            profile.save()
+    def save(self, commit=True):
+        try:
+            profile = Profile()
+            user = User()
+            user.username = self.phone
+            password = make_password(self.phone)
+            user.password = password
+            user.save()
+            profile.user = user
+            if commit:
+                profile.save()
+                new_phone = Phone()
+                new_phone.number = self.phone
+                new_phone.profile = profile
+        except Exception as exception:
+            return None
         return profile
 
 class UserParametersForm(forms.Form):

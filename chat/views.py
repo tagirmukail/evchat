@@ -9,7 +9,7 @@ def index(request):
     profile = Profile.objects.filter(user=user).first()
     rooms = []
     if profile:
-        rooms = Room.objects.filter(profiles=profile)
+        rooms = Room.objects.filter(participant=profile)
 
     context = {"rooms": rooms}
     return render(request, "chat/index.html", context)

@@ -1,20 +1,16 @@
 from django.db import models
 from users.models import Profile
 
-class Room(models.Model):
-    name = models.TextField(null=False)
-    label = models.SlugField(unique=True)
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
-    online_status = models.BooleanField(default=False)
-    deleted = models.BooleanField(default=False)
-    profiles = models.ManyToManyField(Profile, related_name='profiles')
 
-    def create(self, name, label, deleted=False, online_status=False):
-        self.name = name
+class Room(models.Model):
+    label = models.TextField(unique=True, null=False)
+    create_date_time = models.DateTimeField(auto_now_add=True)
+    is_online = models.BooleanField(default=False, null=False)
+    is_delete = models.BooleanField(default=False, null=False)
+    participant = models.ManyToManyField(Profile, related_name='participant')
+
+    def create(self, label):
         self.label = label
-        self.deleted = deleted if deleted else False
-        self.online_status = online_status if online_status else False
 
     @property
     def group_name(self):
@@ -23,50 +19,52 @@ class Room(models.Model):
     def __repr__(self):
         return """
         Id:{},
-        Name:{},
         Label:{},
         Create Date:{},
-        Online:{}""".format(
+        Online:{}
+        Delete:{}""".format(
             self.id,
-            self.name,
             self.label,
             self.create_date,
-            self.online_status
+            self.is_online,
+            self.is_delete
         )
 
+
 class Message(models.Model):
-    room = models.ForeignKey(Room, related_name='message_rooms', on_delete=models.CASCADE)
-    user = models.ForeignKey(Profile, related_name='message_users', on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, related_name='rooms', on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, related_name='profiles', on_delete=models.CASCADE)
 
-    message = models.TextField(null=False, max_length=3000)
-    message_html = models.TextField()
+    text = models.TextField(null=False, max_length=3000)
+    html = models.TextField(null=False, max_length=6000)
 
-    send_date = models.DateTimeField(auto_now_add=True)
-    delive_date = models.DateTimeField()
+    create_date_time = models.DateTimeField(auto_now_add=True)
+    update_date_time = models.DateTimeField(auto_now=True)
 
-    deleted = models.BooleanField(default=False)
+    send_date_time = models.DateTimeField()
+    delive_date_time = models.DateTimeField()
 
-    def create(self, room, user, message, message_html, delive_date, deleted):
-        self.room = room
-        self.user = user
+    delete = models.BooleanField(default=False)
 
-        self.message = message
-        self.message_html = message_html
+    def create(self, text, html, delive_date_time, send_date_time, delete):
+        self.text = text
+        self.html = html
 
-        self.delive_date = delive_date
+        self.send_date_time = send_date_time
+        self.delive_date_time = delive_date_time
 
-        self.deleted = deleted
+        self.delete = delete
 
     def __repr__(self):
         return """
         ID:{}
-        Room:{},
-        User:{},
-        Send Date:{},
-        Deliv Date:{}""".format(
+        Text:{},
+        HTML:{},
+        Send Date Time:{},
+        Deliv Date Time:{}""".format(
             self.id,
-            self.room.id,
-            self.user.id,
-            self.send_date,
-            self.delive_date
+            self.text[:50] if len(self.text) > 50 else self.text,
+            self.html[:60] if len(self.html) > 60 else self.html,
+            self.send_date_time,
+            self.delive_date_time
         )

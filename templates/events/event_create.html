@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block header %}
+    <h2>
+        Evchat
+    </h2>
+{% endblock header %}
+
+{% block content %}
+<form method="post" action="{% url 'event_create'}">
+    {% csrf_token %}
+    <h3>Event</h3>
+    {% bootstrap_form event_form %}
+    <h3>Place</h3>
+    {% bootstrap_form place_form %}
+
+    {% buttons %}
+        <button name="submit" class="btn btn-primary">Создать</button>
+    {% endbuttons %}
+    <input type="hidden" name="next" value="{% url 'index' %}"/>
+</form>
+{% endblock content %}
+
+{% block extra_body %}
+{% load static %}
+<script src="">
+</script>
+{% endblock extra_body %}
