@@ -180,3 +180,6 @@ TYPES_BY_MESSAGES = {
     'ENTER': 4,
     'LEAVE': 5
 }
+
+# Event Settings
+DATETIME_FORMAT = "%d/%m/%Y %H:%M"

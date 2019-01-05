@@ -1,23 +1,14 @@
 from django.db import models
-
 from users.models import Profile
-
-
-
-class Place(models.Model):
-    city = models.TextField(null=False, max_length=250)
-    country = models.TextField(null=False, max_length=250)
-    delete = models.BooleanField(default=False)
-    description = models.TextField(max_length=1000, null=True)
 
 
 class Event(models.Model):
 
     profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
-    place = models.ForeignKey(Place, on_delete=models.PROTECT)
     subscribe = models.ManyToManyField(Profile, related_name='subscribe')
     like = models.ManyToManyField(Profile, related_name='like')
 
+    place = models.TextField(null=False, max_length=1000)
     title = models.TextField(null=False, max_length=250)
     description = models.TextField(max_length=3000, null=True)
 
@@ -56,12 +47,10 @@ class Event(models.Model):
 class Tag(models.Model):
     text = models.TextField(null=False)
     event = models.ForeignKey(Event, on_delete=models.PROTECT, null=True)
-    place = models.ForeignKey(Place, on_delete=models.PROTECT, null=True)
     profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
 
 
 class Star(models.Model):
     count = models.IntegerField(default=0)
     event = models.ForeignKey(Event, on_delete=models.PROTECT, null=True)
-    place = models.ForeignKey(Place, on_delete=models.PROTECT, null=True)
     profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
