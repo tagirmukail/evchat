@@ -45,7 +45,7 @@ class Event(models.Model):
 
 
 class Tag(models.Model):
-    text = models.TextField(null=False)
+    text = models.CharField(null=False, max_length=400)
     event = models.ForeignKey(Event, on_delete=models.PROTECT, null=True)
     profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
 

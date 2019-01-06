@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'pymemcache',
     'bootstrap3',
     'channels',
+    'rest_framework',
     'chat',
     'events',
     'users',

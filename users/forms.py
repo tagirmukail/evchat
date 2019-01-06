@@ -72,18 +72,19 @@ class ProfileForm(forms.Form):
 
     def save(self, commit=True):
         try:
+            new_phone = Phone()
             profile = Profile()
             user = User()
             user.username = self.phone
             password = make_password(self.phone)
             user.password = password
+            new_phone.number = self.phone
             user.save()
             profile.user = user
             if commit:
                 profile.save()
-                new_phone = Phone()
-                new_phone.number = self.phone
                 new_phone.profile = profile
+                new_phone.save()
         except Exception as exception:
             return None
         return profile
