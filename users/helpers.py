@@ -1,10 +1,7 @@
-import hashlib, datetime
+import hashlib
+
 
 class Helper(object):
-
-    MIN_PASS_VAL = 100001
-    MAX_PASS_VAL = 999998
-
     md5 = "md5"
     sha256 = "sha256"
 

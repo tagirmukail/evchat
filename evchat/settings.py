@@ -181,6 +181,9 @@ TYPES_BY_MESSAGES = {
     'ENTER': 4,
     'LEAVE': 5
 }
+## Auth by phone settings
+MIN_ACCEPT_CODE_VAL = 100001
+MAX_ACCEPT_CODE_VAL = 999998
 
 # Event Settings
 DATETIME_FORMAT = "%d/%m/%Y %H:%M"

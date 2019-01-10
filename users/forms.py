@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.core import validators
 from django.core.cache import cache
 from .helpers import Helper
@@ -9,6 +10,8 @@ from random import randint
 
 helper = Helper()
 
+phone_invalid_message = "Phone number must be entered in the format: '+70000000000'. Up to 15 digits allowed."
+
 
 class SendForm(forms.Form):
     class Meta:
@@ -17,15 +20,15 @@ class SendForm(forms.Form):
         }
 
     phone_regex = validators.RegexValidator(regex=r'^\+?1?\d{9,15}$',
-                                            message="Phone number must be entered in the format: '+70000000000'. Up to 15 digits allowed.")
+                                            message=phone_invalid_message)
     phone = forms.CharField(label='Phone', validators=[phone_regex], max_length=17)
 
     def generate_acceppted_code(self):
-        accept_code = str(randint(helper.MIN_PASS_VAL, helper.MAX_PASS_VAL))
+        accept_code = str(randint(settings.MIN_ACCEPT_CODE_VAL, settings.MAX_ACCEPT_CODE_VAL))
 
         while True:
             if cache.get(accept_code):
-                accept_code = str(randint(helper.MIN_PASS_VAL, helper.MAX_PASS_VAL))
+                accept_code = str(randint(settings.MIN_ACCEPT_CODE_VAL, settings.MAX_ACCEPT_CODE_VAL))
             else:
                 break
 
@@ -45,7 +48,7 @@ class ProfileForm(forms.Form):
     phone = ""
     accept_code = forms.IntegerField(
         label='Accept Code',
-        min_value=helper.MIN_PASS_VAL, max_value=helper.MAX_PASS_VAL,
+        min_value=settings.MIN_ACCEPT_CODE_VAL, max_value=settings.MAX_ACCEPT_CODE_VAL,
         widget=forms.NumberInput()
     )
 
@@ -94,7 +97,7 @@ class UserParametersForm(forms.Form):
                                             message="Hier must be entered symbols: -_, a-z, A-Z, 0-9.")
     email_valid = validators.EmailValidator(message="Email not valid symbols.")
     phone_regex = validators.RegexValidator(regex=r'^\+?1?\d{9,15}$',
-                                            message="Phone number must be entered in the format: '+70000000000'. Up to 15 digits allowed.")
+                                            message=phone_invalid_message)
 
     phone = forms.CharField(label='Phone', validators=[phone_regex], max_length=17)
     name = forms.CharField(label='Name', max_length=17)
