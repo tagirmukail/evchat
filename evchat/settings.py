@@ -161,6 +161,13 @@ LOGIN_URL = "/auth"
 MEDIA_ROOT = '/media/'
 MEDIA_URL = '/media/'
 
+# Rest-framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGINATE_BY': 10
+}
+
 # Specific settings
 IS_ENTER_OR_LEAVE_ROOMS = True
 

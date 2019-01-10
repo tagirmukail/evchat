@@ -18,7 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^', include('api.urls')),
     url(r'^', include("users.urls")),
     url(r'^chat/', include("chat.urls")),
     url(r'^', include("events.urls")),
