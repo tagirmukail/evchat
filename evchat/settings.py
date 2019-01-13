@@ -163,6 +163,7 @@ MEDIA_URL = '/media/'
 
 # Rest-framework settings
 REST_FRAMEWORK = {
+    'DATETIME_FORMAT': "%m/%d/%Y %H:%M",
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGINATE_BY': 10
@@ -194,3 +195,6 @@ MAX_ACCEPT_CODE_VAL = 999998
 
 # Event Settings
 DATETIME_FORMAT = "%d/%m/%Y %H:%M"
+from django.conf.global_settings import DATETIME_INPUT_FORMATS
+
+DATETIME_INPUT_FORMATS.append(DATETIME_FORMAT)

@@ -6,6 +6,7 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Event
         fields = (
+            'id',
             'profile',
             'place',
             'start_date_time',
@@ -22,6 +23,7 @@ class TagSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Tag
         fields = (
+            'id',
             'text',
             'event',
             'profile'

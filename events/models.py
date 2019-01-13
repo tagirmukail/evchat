@@ -20,11 +20,10 @@ class Event(models.Model):
 
     delete = models.BooleanField(default=False)
 
-    def create(self, title, desctiption, type, start_date_time):
-        super(Event, self).create()
-
+    def create(self, title, description,place, type, start_date_time):
         self.title = title
-        self.description = desctiption
+        self.description = description
+        self.place = place
 
         self.type = type
 
@@ -33,12 +32,14 @@ class Event(models.Model):
     def __repr__(self):
         return """
         Id:{id},
-        title:{title},  
+        title:{title},
+        place:{place},  
         type:{type},  
         start_date_time:{start_date_time}
         """.format(
             id=self.id,
             title=self.title,
+            place=self.place,
             type=self.type,
             start_date_time=self.start_date_time
         )

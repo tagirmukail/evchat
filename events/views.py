@@ -16,8 +16,11 @@ def create_event(request):
                 event = event_form.save(commit=False)
                 profile = Profile.objects.filter(user=request.user).first()
                 event.profile = profile
+                print(event.__repr__())
                 event.save()
                 return HttpResponseRedirect(reverse('index'))
+            else:
+                print(event_form.errors)
         except EventStartDateTimeException as exception:
             event_form.add_error('start_date_time', exception)
     context = {'event_form': event_form}

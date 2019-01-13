@@ -14,15 +14,16 @@
     {% bootstrap_field event_form.title %}
     {% bootstrap_field event_form.type %}
     {% bootstrap_field event_form.description %}
-<div class="input-group date" id="datetimepicker6">
-    <span class="input-group-addon datepickerbutton">
-        <span class="glyphicon glyphicon-calendar"></span>
-    </span>
-    {% bootstrap_field event_form.start_date_time %}
-    <span class="input-group-addon">
-        <span class="glyphicon glyphicon-remove"></span>
-    </span>
-</div>
+    <div class="input-group date" id="datetimepicker6">
+        <span class="input-group-addon datepickerbutton">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+        <br>
+        {% bootstrap_field event_form.start_date_time %}
+        <span class="input-group-addon">
+            <span class="glyphicon glyphicon-remove"></span>
+        </span>
+    </div>
     {% bootstrap_field event_form.place %}
     <div id="map" style="width: 50%; height: 300px;">
         <label id="place_label">Search place for selected.</label>
