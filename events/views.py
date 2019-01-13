@@ -16,7 +16,6 @@ def create_event(request):
                 event = event_form.save(commit=False)
                 profile = Profile.objects.filter(user=request.user).first()
                 event.profile = profile
-                print(event.__repr__())
                 event.save()
                 return HttpResponseRedirect(reverse('index'))
             else:
