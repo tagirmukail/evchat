@@ -1,8 +1,7 @@
 from django import forms
 from django.conf import settings
 from .models import Event
-from django.conf.global_settings import DATETIME_INPUT_FORMATS
-from .exceptions import EventPlaceException, EventStartDateTimeException
+from .exceptions import EventStartDateTimeException
 import datetime
 
 
@@ -13,27 +12,26 @@ class EventForm(forms.ModelForm):
             'title',
             'place',
             'description',
-            # 'start_date_time',
             'type',
         ]
         widgets = {
             'place': forms.TextInput(attrs={"type": "hidden"}),
-            # 'start_date_time': forms.DateTimeInput(format=settings.DATETIME_FORMAT, attrs={'class': "form-control"}),
-            'type': forms.NumberInput(attrs={'min': 0, 'max': 1, 'default': 0}),
+            'type': forms.NumberInput(attrs={
+                'min': settings.TYPE_CLOSE_EVENT,
+                'max': settings.TYPE_OPEN_EVENT,
+                'default': settings.TYPE_CLOSE_EVENT}),
             'title': forms.TextInput()
         }
 
         labels = {
-            # 'start_date_time': 'Start',
             'place': 'Search place in map',
             'type': "Select type to event"
         }
 
-        input_formats = {
-            # 'start_date_time': DATETIME_INPUT_FORMATS
-        }
-
-    start_date_time = forms.DateTimeField(input_formats=[settings.DATETIME_FORMAT], label='start', widget=forms.DateTimeInput(attrs={'class': "form-control"}))
+    start_date_time = forms.DateTimeField(input_formats=[settings.DATETIME_FORMAT],
+                                          label='start',
+                                          widget=forms.DateTimeInput(attrs={'class': "form-control"})
+                                          )
 
     def is_valid(self):
         super(EventForm, self).is_valid()

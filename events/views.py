@@ -4,7 +4,10 @@ from django.contrib.auth.decorators import login_required
 from .models import Event, Star, Tag
 from users.models import Profile
 from .forms import EventForm
-from .exceptions import EventStartDateTimeException
+from .exceptions import EventStartDateTimeException, EventNotFoundException
+import logging
+
+std_logger = logging.getLogger(__name__)
 
 @login_required
 def create_event(request):
@@ -25,9 +28,10 @@ def create_event(request):
     context = {'event_form': event_form}
     return render(request, 'events/event_create.html', context)
 
+
 @login_required
 def event(request, event_id):
     event = Event.objects.filter(id=event_id).first()
     if not event:
-        return Http404("This event not found")
+        raise Http404(EventNotFoundException("This event not found"))
     return render(request, 'events/event.html', context={'event': event})

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,6 +40,44 @@ SECRET_KEY = 'a%=evyn!b-kv&pe&6vg0l^y94q&5d9smfddw9&0t2h)**o^o-r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+LOGGER_DIR = os.path.join(BASE_DIR, "logs")
+
+exist_log_dir = os.path.exists(
+    LOGGER_DIR
+)
+if not exist_log_dir:
+    os.mkdir(LOGGER_DIR)
+
+LOGGER_FILE = os.path.join(LOGGER_DIR, "evchat.log")
+
+LOGGER_DEBUG = "DEBUG"
+LOGGER_INFO = "INFO"
+LOGGER_ERROR = "ERROR"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': LOGGER_DEBUG,
+            'class': 'logging.FileHandler',
+            'filename': LOGGER_FILE,
+        },
+    },
+    'loggers': {
+        'users': {
+            'handlers': ['file'],
+            'level': LOGGER_DEBUG,
+            'propagate': True,
+        },
+        'events': {
+            'handlers': ['file'],
+            'level': LOGGER_DEBUG,
+            'propagate': True,
+        }
+    },
+}
 
 ALLOWED_HOSTS = [
     '*'
@@ -189,11 +228,14 @@ TYPES_BY_MESSAGES = {
     'ENTER': 4,
     'LEAVE': 5
 }
-## Auth by phone settings
+# Auth by phone settings
 MIN_ACCEPT_CODE_VAL = 100001
 MAX_ACCEPT_CODE_VAL = 999998
 
 # Event Settings
+TYPE_OPEN_EVENT = 1
+TYPE_CLOSE_EVENT = 0
+
 DATETIME_FORMAT = "%d/%m/%Y %H:%M"
 from django.conf.global_settings import DATETIME_INPUT_FORMATS
 

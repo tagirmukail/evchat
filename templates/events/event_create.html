@@ -2,9 +2,9 @@
 {% load bootstrap3 %}
 
 {% block header %}
-    <h2>
-        Evchat
-    </h2>
+<h2>
+    Evchat
+</h2>
 {% endblock header %}
 
 {% block content %}
@@ -31,66 +31,14 @@
     <br>
     <hr>
     {% buttons %}
-        <button name="submit" class="btn btn-primary">Создать</button>
+    <button name="submit" class="btn btn-primary">Создать</button>
     {% endbuttons %}
-    <input type="hidden" name="next" value="{% url 'index' %}"/>
+    <input type="hidden" name="next" value="{% url 'index' %}" />
 </form>
 {% endblock content %}
 
 {% block extra_body %}
 {% load static %}
+<script src="{% static 'js/event.js' %}"></script>
 <script src="http://api-maps.yandex.ru/2.1.17/?lang=en" type="text/javascript"></script>
-<script>
-$(document).ready(function() {
-
-    function init_datetime() {
-        $('#datetimepicker6').datetimepicker(
-        {
-            locale: 'ru',
-            format: 'DD/MM/YYYY HH:mm',
-            sideBySide: true
-        });
-        $('.glyphicon-remove').click(function () {
-            $('#datetimepicker6').data("DateTimePicker").clear();
-        });
-    }
-
-    init_datetime();
-    ymaps.ready(init);
-
-    function init(){
-
-    var myMap;
-
-    myMap = new ymaps.Map("map", {
-        center: [55.76, 37.64],
-        zoom: 13,
-        controls: []
-    });
-
-    myMap.behaviors.disable('scrollZoom');
-    myMap.controls.add("zoomControl", {
-        position: {top: 15, left: 15}
-    });
-
-    var searchControl = new ymaps.control.SearchControl({
-        options: {
-            provider: 'yandex#map'
-        }
-    });
-
-    myMap.controls.add(searchControl);
-
-    searchControl.events.add('resultselect', function (e) {
-
-    var results = searchControl.getResultsArray();
-    var selected = e.get('index');
-    var result = results[selected];
-    $('#id_place').val(result.properties.get('text'));
-    $('#place_label').html("Your selected place: " + $('#id_place').val());
-})
-}
-
-});
-</script>
 {% endblock extra_body %}

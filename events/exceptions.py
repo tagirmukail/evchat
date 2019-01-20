@@ -5,3 +5,7 @@ class EventStartDateTimeException(Exception):
 
 class EventPlaceException(Exception):
     pass
+
+
+class EventNotFoundException(Exception):
+    pass
