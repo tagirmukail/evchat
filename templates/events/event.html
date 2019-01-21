@@ -1,26 +1,28 @@
-{% extends "base.html" %}
-{% load bootstrap3 %}
-
-{% block header %}
-    <h2>
-        Evchat
-    </h2>
+{% extends "base.html" %} {% load bootstrap3 %} {% block header %}
+<h2>
+    Evchat
+</h2>
 {% endblock header %}
 
 {% block content %}
-    {{ event.title }}
-    <br>
-    {{ event.description }}
-    <br>
-    {{ event.start_date_time }}
-    <br>
-    {{ event.place }}
-    <br>
-    {{ event.type }}
-{% endblock content %}
-
-{% block extra_body %}
-{% load static %}
-<script>
+<div id="eventDetailID">
+    <div id="eventDetailStartDateTimeID">
+        {{ event.start_date_time }}
+    </div>
+    <div id="eventDetailTypeID">
+        {{ event.type }}
+    </div>
+    <div id="eventDetailTitleID">
+        {{ event.title}}
+    </div>
+    <div id="eventDetailDescriptionID">
+        {{ event.description }}
+    </div>
+    <div id="eventDetailPlaceID">
+        {{ event.place }}
+    </div>
+</div>
+{% endblock content %} {% block extra_body %} {% load static %}
+<script src="{% static 'js/event.js' %}">
 </script>
 {% endblock extra_body %}
