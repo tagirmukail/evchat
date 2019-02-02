@@ -1,4 +1,5 @@
 import bcrypt
+from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.models import User
 from django.db import models
 from .helpers import Helper
@@ -66,6 +67,20 @@ class Phone(models.Model):
         phone.profile = profile
         phone.number = number
         return phone
+
+    @staticmethod
+    def make_crypt_number(number, salt=1):
+        if number.isdigit():
+            ...
+        elif number[1:].isdigit():
+            number = number[1:]
+        else:
+            raise ValueError("is not number")
+
+        number1 = int(number[:len(number)//2])
+        number2 = int(number[len(number)//2:])
+
+        return make_password(number1 - salt - (number1 % salt) + number2 - salt - (number2 % salt))
 
     def __str__(self):
         return """

@@ -4,7 +4,6 @@ from django.core import validators
 from django.core.cache import cache
 from .helpers import Helper
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import check_password, make_password
 from .models import Profile, Phone
 from random import randint
 
@@ -79,8 +78,7 @@ class ProfileForm(forms.Form):
             profile = Profile()
             user = User()
             user.username = self.phone
-            password = make_password(self.phone)
-            user.password = password
+            user.password = Phone.make_crypt_number(self.phone)
             new_phone.number = self.phone
             user.save()
             profile.user = user
