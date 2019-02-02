@@ -3,7 +3,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from .api_users import api_root, UserList, UserDetail, ProfileList, ProfileDetail, \
     PhoneList, PhoneDetail, AvatarList, AvatarDetail
 from .api_events import EventList, EventDetail
-
+from .api_chat import MessageList, MessageDetail, RoomList, RoomDetail
 
 urlpatterns = [
     url(r'^api/$', api_root, name='api'),
@@ -24,6 +24,13 @@ urlpatterns = [
     # Events api urls
     url(r'^events/$', EventList.as_view(), name='event-list'),
     url(r'^events/(?P<pk>\d+)/$', EventDetail.as_view(), name='event-detail'),
+
+    # Chat api urls
+    url(r'^rooms/$', RoomList.as_view(), name='room-list'),
+    url(r'^rooms/(?P<pk>\d+)/$', RoomDetail.as_view(), name='room-detail'),
+
+    url(r'^messages/$', MessageList.as_view(), name='message-list'),
+    url(r'^messages/(?P<pk>\d+)/$', MessageDetail.as_view(), name='message-detail')
 
 ]
 
