@@ -5,7 +5,7 @@ django-channels-presence==0.0.9
 channels_redis==2.3.1
 bcrypt==3.1.4
 django-bootstrap3==11.0.0
-Pillow==5.3.0
+Pillow==6.2.0
 pymemcache==2.1.0
 python-memcached==1.59
 djangorestframework==3.9.0
